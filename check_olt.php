@@ -76,16 +76,19 @@ if ($err) {
 
         $postData .= "\n$friendlyName - Total: {$counts['Total']}, Online: {$counts['Online']}, Offline: {$counts['Offline']}, Power Fail: {$counts['Power fail']}, LOS: {$counts['LOS']}\n";
 
+	$allowed_offline = $counts['Total'] * 0.04;
+
 
 	// Send Alert
-	if (($counts['Total'] * 0.03) < $counts['Online']) {
+	if (($counts['Total'] - $allowed_offline) > $counts['Online']) {
+		echo "Setting Alert to True\n";
 		$sendAlert = True;
 		$checkOLT = $friendlyName;
+    		$postData .= "\nCheck OLT: ".$checkOLT ."\n";
 	}
 
     }
 
-    $postData .= "\nCheck OLT: ".$checkOLT;
 
     // Add your notification logic here, if needed...
     // File to track last notification time
