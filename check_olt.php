@@ -94,7 +94,7 @@ if ($err) {
 
     if (file_exists($timeTrackerFile)) {
         $lastNotificationTime = file_get_contents($timeTrackerFile);
-        if (time() - $lastNotificationTime >= 3600) { // 3600 seconds = 1 hour
+        if (time() - $lastNotificationTime >= 600) { // 3600 seconds = 1 hour
             $canNotify = true;
         }
     } else {
