@@ -71,9 +71,11 @@ if ($err) {
     $sendAlert = false;
     $postData = "";
     // For demonstration, print counts by olt_id with friendly names
+    echo "\n".date("Y-m-d H:i:s")."\n";
+
     foreach ($countsByOltId as $oltId => $counts) {
 	$friendlyName = isset($oltFriendlyNames[$oltId]) ? $oltFriendlyNames[$oltId] : "OLT ID $oltId";
-        echo "$friendlyName - Total: {$counts['Total']}, Online: {$counts['Online']}, Offline: {$counts['Offline']}, Power Fail: {$counts['Power fail']}, LOS: {$counts['LOS']}\n";
+        echo "   $friendlyName - Total: {$counts['Total']}, Online: {$counts['Online']}, Offline: {$counts['Offline']}, Power Fail: {$counts['Power fail']}, LOS: {$counts['LOS']}\n";
 
         $postData .= "\n$friendlyName - Total: {$counts['Total']}, Online: {$counts['Online']}, Offline: {$counts['Offline']}, Power Fail: {$counts['Power fail']}, LOS: {$counts['LOS']}\n";
 
