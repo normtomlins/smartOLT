@@ -3,6 +3,7 @@
 $token = getenv('SMARTOLT_TOKEN');
 $domain = getenv('SMARTOLT_SUB_DOMAIN');
 $nfty_server = getenv("NTFY_SERVER_URL");
+$twillo_server = getenv("TWILLO_SERVER");
 
 // OLT ID to friendly name mapping
 $oltFriendlyNames = [
@@ -105,6 +106,7 @@ if ($err) {
     }
 
     // Send notification if the online count is less than 500 and it's been at least an hour since the last one
+    //if (true) {
     if ($sendAlert && $canNotify) {
         // Initialize a cURL session for posting the notification
         $curlPost = curl_init();
@@ -134,6 +136,39 @@ if ($err) {
         } else {
             echo "Failed to send notification.\n";
         }
-    }
+
+	// Call the Twillo Server
+
+	$curl = curl_init();
+	$postData = array();
+	$postData['monitor_name'] = $friendlyName;
+	$postData['monitor_status'] = 'having some issues, please check on this O.L.T';
+
+	// Set cURL options for getting ONUs statuses
+	curl_setopt_array($curl, [
+    	CURLOPT_URL => $twillo_server,
+	//CURLOPT_VERBOSE => true,
+    	CURLOPT_RETURNTRANSFER => true,
+    	CURLOPT_ENCODING => "",
+    	CURLOPT_MAXREDIRS => 10,
+    	CURLOPT_TIMEOUT => 30,
+    	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "POST",
+        CURLOPT_POSTFIELDS => $postData
+]);
+
+// Execute the cURL request for getting ONUs statuses
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+// Close the cURL session for getting ONUs statuses
+curl_close($curl);
+
+if ($err) {
+    echo "cURL Error #:" . $err;
+}
+
+}
+
 }
 
