@@ -2,8 +2,8 @@
 
 $token = getenv('SMARTOLT_TOKEN');
 $domain = getenv('SMARTOLT_SUB_DOMAIN');
-$nfty_server = getenv("NTFY_SERVER_URL");
-$twillo_server = getenv("TWILLO_SERVER");
+$nfty_server = getenv('NTFY_SERVER_URL');
+$twillo_server = getenv('TWILLO_SERVER');
 
 // OLT ID to friendly name mapping
 $oltFriendlyNames = [
@@ -40,6 +40,7 @@ if ($err) {
     echo "cURL Error #:" . $err;
 } else {
     $dataArray = json_decode($response, true);
+    var_dump($response);
 
     if (!isset($dataArray['response']) || !is_array($dataArray['response'])) {
         echo "Unexpected data format or no data received.";

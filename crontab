@@ -1,0 +1,5 @@
+# run the test script every minute and output whatever it echoes in a log file
+# using `>` instead of `>>` to append a new line at each cron iteration
+SHELL=/bin/bash
+BASH_ENV=/etc/environment
+* * * * * /usr/local/bin/php /cron_scripts/check_olt.php >> /cron_scripts/zte_check_cron.log 2>&1

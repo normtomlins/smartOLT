@@ -1,2 +1,3 @@
 check_zte.sh
 last_notification_time.txt
+.env

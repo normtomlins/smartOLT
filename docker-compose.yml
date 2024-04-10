@@ -1,0 +1,12 @@
+ # this is the container that will execute our cron
+services:
+  cron:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    image: normtomlins/smartolt-reporter:1.00
+    env_file:
+        - .env
+    # run crond as main process of container
+    #entrypoint: [ "bash", "-c", "cron -f"] 
+    entrypoint: [ "/entry.sh"] 
