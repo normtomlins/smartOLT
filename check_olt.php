@@ -40,7 +40,7 @@ if ($err) {
     echo "cURL Error #:" . $err;
 } else {
     $dataArray = json_decode($response, true);
-    var_dump($response);
+//    var_dump($response);
 
     if (!isset($dataArray['response']) || !is_array($dataArray['response'])) {
         echo "Unexpected data format or no data received.";
@@ -146,7 +146,7 @@ if ($err) {
 	$curl = curl_init();
 	$postData = array();
 	$postData['monitor_name'] = $friendlyName;
-	$postData['monitor_status'] = 'having some issues, please check on this O.L.T';
+	$postData['monitor_status'] = 'having some issues, please check on this O.L.T as a large number of O.N.U are offline';
 
 	// Set cURL options for getting ONUs statuses
 	curl_setopt_array($curl, [

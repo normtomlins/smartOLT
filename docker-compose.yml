@@ -4,6 +4,7 @@ services:
     build:
       context: ./
       dockerfile: ./Dockerfile
+    restart: always
     image: normtomlins/smartolt-reporter:1.00
     env_file:
         - .env
