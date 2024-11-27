@@ -90,6 +90,14 @@ if ($err) {
 		$sendAlert = True;
 		$checkOLT = $friendlyName;
     		$postData .= "\nCheck OLT: ".$checkOLT ."\n";
+		if ($counts['Power fail'] > $counts['LOS']) {
+                        $reason = "Power Failure";
+                } elseif ($counts['LOS'] > $counts['Power fail']) {
+                        $reason = "Potential Fibre cut";
+                } else {
+                        $reason = "Unknown Reason";
+                }
+                break;
 	}
 
     }
@@ -107,6 +115,7 @@ if ($err) {
         }
     } else {
         $canNotify = true; // No record found, so we can notify
+	$sendAlert = true;
     }
 
     // Send notification if the online count is less than 500 and it's been at least an hour since the last one
@@ -145,23 +154,35 @@ if ($err) {
 
 	$curl = curl_init();
 	$postData = array();
-	$postData['monitor_name'] = $friendlyName;
-	$postData['monitor_status'] = 'having some issues, please check on this O.L.T as a large number of O.N.U are offline';
 
-	// Set cURL options for getting ONUs statuses
-	curl_setopt_array($curl, [
-    	CURLOPT_URL => $twillo_server,
-	//CURLOPT_VERBOSE => true,
-    	CURLOPT_RETURNTRANSFER => true,
-    	CURLOPT_ENCODING => "",
-    	CURLOPT_MAXREDIRS => 10,
-    	CURLOPT_TIMEOUT => 30,
-    	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "POST",
-        CURLOPT_POSTFIELDS => $postData
+        $postData = [
+                'monitor_name' => $friendlyName,
+                'monitor_status' => 'having some issues, please check on this O.L.T as a large number of O.N.U are offline.  It would appear to be a '.$reason
+        ];
+
+// Encode the data as a URL-encoded string
+$urlEncodedData = http_build_query($postData);
+    
+// Set the cURL options
+curl_setopt_array($curl, [
+    CURLOPT_URL => $twillo_server,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => "",
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => "POST",
+    CURLOPT_POSTFIELDS => $urlEncodedData,
+    CURLOPT_HTTPHEADER => [
+        "Content-Type: application/x-www-form-urlencoded",
+        "Content-Length: " . strlen($urlEncodedData)
+    ],
 ]);
 
+
+// Set cURL options for getting ONUs statuses
 // Execute the cURL request for getting ONUs statuses
+
 $response = curl_exec($curl);
 $err = curl_error($curl);
 
