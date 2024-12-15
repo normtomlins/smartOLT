@@ -95,6 +95,7 @@ if ($err) {
                 } elseif ($counts['LOS'] > $counts['Power fail']) {
                         $reason = "Potential Fibre cut";
                 } else {
+			$sendAlert = false;
                         $reason = "Unknown Reason";
                 }
                 break;
