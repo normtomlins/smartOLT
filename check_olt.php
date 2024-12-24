@@ -96,6 +96,7 @@ if ($err) {
                         $reason = "Potential Fibre cut";
                 } else {
 			$sendAlert = false;
+			$canNotify = false;
                         $reason = "Unknown Reason";
                 }
                 break;
