@@ -6,6 +6,8 @@ services:
       dockerfile: ./Dockerfile
     restart: always
     image: normtomlins/smartolt-reporter:1.00
+    environment:
+      - TZ=America/Toronto
     env_file:
         - .env
     # run crond as main process of container
