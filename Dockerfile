@@ -14,7 +14,7 @@ COPY entry.sh /entry.sh
 
 # creating the log file that will be written to at each cron iteration
 RUN touch zte_check_cron.log 
-RUN touch last_notification_time.txt
+RUN touch last_notification_time.txt && chmod 777 last_notification_time.txt && echo "1" >> last_notification_time.txt
 
 # copy the crontab in a location where it will be parsed by the system
 COPY ./crontab /etc/cron.d/crontab
